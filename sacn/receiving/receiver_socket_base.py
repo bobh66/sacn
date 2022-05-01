@@ -1,6 +1,8 @@
-# This file is under MIT license. The license file can be obtained in the root directory of this module.
+# This file is under MIT license. The license file can be obtained in the root directory of this
+# module.
 
 import logging
+from abc import ABC
 
 
 class ReceiverSocketListener:
@@ -34,4 +36,12 @@ class ReceiverSocketBase:
         raise NotImplementedError
 
     def leave_multicast(self, multicast_addr: str) -> None:
+        raise NotImplementedError
+
+
+class AsyncReceiverSocketBase(ReceiverSocketBase, ABC):
+    def __init__(self, listener: ReceiverSocketListener):
+        super().__init__(listener)
+
+    async def start(self) -> None:
         raise NotImplementedError

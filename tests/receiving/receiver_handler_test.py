@@ -2,8 +2,9 @@
 
 import pytest
 from sacn.messages.data_packet import DataPacket
-from sacn.receiving.receiver_handler import ReceiverHandler, ReceiverHandlerListener, E131_NETWORK_DATA_LOSS_TIMEOUT_ms
-from sacn.receiving.receiver_socket_test import ReceiverSocketTest
+from sacn.receiving.receiver_handler import ReceiverHandler,\
+    ReceiverHandlerListener, E131_NETWORK_DATA_LOSS_TIMEOUT_ms
+from tests.receiving.receiver_socket_test import ReceiverSocketTest
 
 
 class ReceiverHandlerListenerTest(ReceiverHandlerListener):

@@ -4,7 +4,7 @@ import pytest
 from sacn.messages.data_packet import \
     calculate_multicast_addr, \
     DataPacket
-from sacn.messages.general_test import property_number_range_check
+from tests.messages.general_test import property_number_range_check
 
 
 def test_calculate_multicast_addr():

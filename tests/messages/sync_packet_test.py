@@ -2,7 +2,7 @@
 
 import pytest
 from sacn.messages.sync_packet import SyncPacket
-from sacn.messages.general_test import property_number_range_check
+from tests.messages.general_test import property_number_range_check
 
 
 def test_constructor():

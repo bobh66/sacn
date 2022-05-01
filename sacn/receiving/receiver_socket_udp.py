@@ -1,4 +1,5 @@
-# This file is under MIT license. The license file can be obtained in the root directory of this module.
+# This file is under MIT license. The license file can be obtained in the root directory of this
+# module.
 
 import socket
 import threading
@@ -21,13 +22,16 @@ class ReceiverSocketUDP(ReceiverSocketBase):
         self._enabled_flag: bool = True
 
         # initialize the UDP socket
-        self._socket: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
+        self._socket: socket.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM,
+                                                    socket.IPPROTO_UDP)
         try:
             self._socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        except socket.error:  # Not all systems support multiple sockets on the same port and interface
+        except socket.error:  # Not all systems support multiple sockets on the same port and
+            # interface
             pass
         self._socket.bind((self._bind_address, self._bind_port))
-        self._logger.info(f'Bind receiver socket to IP: {self._bind_address} port: {self._bind_port}')
+        self._logger.info(f'Bind receiver socket to IP: {self._bind_address}'
+                          f' port: {self._bind_port}')
 
     def start(self):
         # initialize thread infos
@@ -50,7 +54,8 @@ class ReceiverSocketUDP(ReceiverSocketBase):
             self._listener.on_periodic_callback(time.time())
             # receive the data
             try:
-                raw_data = list(self._socket.recv(2048))  # greater than 1144 because the longest possible packet
+                raw_data = list(self._socket.recv(2048))  # greater than 1144 because the longest
+                # possible packet
                 # in the sACN standard is the universe discovery packet with a max length of 1144
             except socket.timeout:
                 continue  # if a timeout happens just go through while from the beginning
@@ -60,8 +65,8 @@ class ReceiverSocketUDP(ReceiverSocketBase):
 
     def stop(self) -> None:
         """
-        Stops a running thread and closes the underlying socket. If no thread was started, nothing happens.
-        Do not reuse the socket after calling stop once.
+        Stops a running thread and closes the underlying socket. If no thread was started,
+        nothing happens. Do not reuse the socket after calling stop once.
         """
         self._enabled_flag = False
         try:

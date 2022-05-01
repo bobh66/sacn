@@ -1,8 +1,9 @@
-# This file is under MIT license. The license file can be obtained in the root directory of this module.
+# This file is under MIT license. The license file can be obtained in the
+# root directory of this module.
 
 import pytest
 from sacn.messages.universe_discovery import UniverseDiscoveryPacket
-from sacn.messages.general_test import property_number_range_check
+from tests.messages.general_test import property_number_range_check
 
 
 def test_constructor():

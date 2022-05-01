@@ -30,8 +30,8 @@ class RootLayer:
         self.cid = cid
 
     def getBytes(self) -> list:
-        '''Returns the Root layer as list with bytes'''
-        tmpList = []
+        """Returns the Root layer as list with bytes"""
+        tmpList = list()
         tmpList.extend(_FIRST_INDEX)
         # first append the high byte from the Flags and Length
         # high 4 bit: 0x7 then the bits 8-11(indexes) from _length

@@ -1,10 +1,11 @@
-# This file is under MIT license. The license file can be obtained in the root directory of this module.
+# This file is under MIT license. The license file can be obtained in the
+# root directory of this module.
 
 import pytest
 import sacn
 from sacn.sender import check_universe
 from sacn.messages.data_packet import DataPacket
-from sacn.sending.sender_socket_test import SenderSocketTest
+from tests.sending.sender_socket_test import SenderSocketTest
 
 
 def test_constructor():
@@ -26,7 +27,8 @@ def test_constructor():
     fps = 40
     universe_discovery = False
     sync_universe = 4567
-    sender = sacn.sACNsender(bind_address, bind_port, source_name, cid, fps, universe_discovery, sync_universe, socket)
+    sender = sacn.sACNsender(bind_address, bind_port, source_name, cid, fps,
+                             universe_discovery, sync_universe, socket)
     assert sender._sender_handler._source_name == source_name
     assert sender._sender_handler._CID == cid
     assert sender.universeDiscovery == universe_discovery
@@ -75,14 +77,17 @@ def test_flush():
     # test that no parameters triggers flushing of all universes
     sender.flush()
     assert socket.send_unicast_called[0].__dict__ == DataPacket(
-        sender._sender_handler._CID, sender._sender_handler._source_name, 1, sync_universe=sync_universe).__dict__
+        sender._sender_handler._CID, sender._sender_handler._source_name, 1,
+        sync_universe=sync_universe).__dict__
 
     # activate universe 2
     sender.activate_output(2)
-    # test that a list with only universe 1 triggers flushing of only this universe
+    # test that a list with only universe 1 triggers flushing
+    # of only this universe
     sender.flush([1])
     assert socket.send_unicast_called[0].__dict__ == DataPacket(
-        sender._sender_handler._CID, sender._sender_handler._source_name, 1, sequence=1, sync_universe=sync_universe).__dict__
+        sender._sender_handler._CID, sender._sender_handler._source_name, 1,
+        sequence=1, sync_universe=sync_universe).__dict__
 
 
 def test_activate_output():
@@ -109,12 +114,14 @@ def test_deactivate_output():
     socket = SenderSocketTest()
     sender = sacn.sACNsender(socket=socket)
 
-    # check that three packets with stream-termination bit set are send out on deactivation
+    # check that three packets with stream-termination bit set are send
+    # out on deactivation
     sender.activate_output(100)
     assert socket.send_unicast_called is None
     sender.deactivate_output(100)
     assert socket.send_unicast_called[0].__dict__ == DataPacket(
-        sender._sender_handler._CID, sender._sender_handler._source_name, 100, sequence=2, streamTerminated=True).__dict__
+        sender._sender_handler._CID, sender._sender_handler._source_name, 100,
+        sequence=2, streamTerminated=True).__dict__
 
     # start with no universes active
     assert list(sender._outputs.keys()) == []
@@ -265,7 +272,7 @@ def test_output_preview_data():
 
     # test default
     assert sender[1].preview_data is False
-    # test setting and retriving the value
+    # test setting and retrieving the value
     test = True
     sender[1].preview_data = test
     assert sender[1].preview_data == test

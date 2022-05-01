@@ -1,4 +1,5 @@
-# This file is under MIT license. The license file can be obtained in the root directory of this module.
+# This file is under MIT license. The license file can be obtained in the root directory of this
+# module.
 
 """
 This represents a framing layer and a DMP layer from the E1.31 Standard
@@ -16,7 +17,8 @@ from sacn.messages.root_layer import \
 
 
 class DataPacket(RootLayer):
-    def __init__(self, cid: tuple, sourceName: str, universe: int, dmxData: tuple = (), priority: int = 100,
+    def __init__(self, cid: tuple, sourceName: str, universe: int, dmxData: tuple = (),
+                 priority: int = 100,
                  sequence: int = 0, streamTerminated: bool = False, previewData: bool = False,
                  forceSync: bool = False, sync_universe: int = 0, dmxStartCode: int = 0x00):
         super().__init__(126 + len(dmxData), cid, VECTOR_ROOT_E131_DATA)
@@ -32,7 +34,8 @@ class DataPacket(RootLayer):
         self.dmxData = dmxData
 
     def __str__(self):
-        return f'sACN DataPacket: Universe: {self._universe}, Priority: {self._priority}, Sequence: {self._sequence}, ' \
+        return f'sACN DataPacket: Universe: {self._universe}, Priority: {self._priority},' \
+               f' Sequence: {self._sequence}, ' \
                f'CID: {self._cid}'
 
     @property
@@ -45,7 +48,8 @@ class DataPacket(RootLayer):
             raise TypeError(f'sourceName must be a string! Type was {type(sourceName)}')
         tmp_sourceName_length = len(str(sourceName).encode('UTF-8'))
         if tmp_sourceName_length > 63:
-            raise ValueError(f'sourceName must be less than 64 bytes when UTF-8 encoded! "{sourceName}" is {tmp_sourceName_length} bytes')
+            raise ValueError(f'sourceName must be less than 64 bytes when UTF-8 encoded!'
+                             f' "{sourceName}" is {tmp_sourceName_length} bytes')
         self._sourceName = sourceName
 
     @property
@@ -127,7 +131,8 @@ class DataPacket(RootLayer):
         """
         if len(data) > 512 or \
                 not all((isinstance(x, int) and (0 <= x <= 255)) for x in data):
-            raise ValueError(f'dmxData is a tuple with a max length of 512! The data in the tuple has to be valid bytes! '
+            raise ValueError(f'dmxData is a tuple with a max length of 512! The data in the tuple '
+                             f'has to be valid bytes! '
                              f'Length was {len(data)}')
         newData = [0]*512
         for i in range(0, min(len(data), 512)):
@@ -183,11 +188,10 @@ class DataPacket(RootLayer):
     @staticmethod
     def make_data_packet(raw_data) -> 'DataPacket':
         """
-        Converts raw byte data to a sACN DataPacket. Note that the raw bytes have to come from a 2016 sACN Message.
-        This does not support DMX Start code!
-        :param raw_data: raw bytes as tuple or list
-        :raises TypeError: when the binary data does not match the criteria for a valid DMX data-packet
-        :return: a DataPacket with the properties set like the raw bytes
+        Converts raw byte data to a sACN DataPacket. Note that the raw bytes have to come from a
+        2016 sACN Message. This does not support DMX Start code! :param raw_data: raw bytes as
+        tuple or list :raises TypeError: when the binary data does not match the criteria for a
+        valid DMX data-packet :return: a DataPacket with the properties set like the raw bytes
         """
         # Check if the length is sufficient
         if len(raw_data) < 126:
@@ -195,16 +199,21 @@ class DataPacket(RootLayer):
         # Check if the three Vectors are correct
         if tuple(raw_data[18:22]) != tuple(VECTOR_ROOT_E131_DATA) or \
            tuple(raw_data[40:44]) != tuple(VECTOR_E131_DATA_PACKET) or \
-           raw_data[117] != VECTOR_DMP_SET_PROPERTY:  # REMEMBER: when slicing: [inclusive:exclusive]
-            raise TypeError('Some of the vectors in the given raw data are not compatible to the E131 Standard!')
+           raw_data[117] != VECTOR_DMP_SET_PROPERTY:  # REMEMBER: when slicing: [
+            # inclusive:exclusive]
+            raise TypeError('Some of the vectors in the given raw data are not compatible to'
+                            ' the E131 Standard!')
 
-        tmpPacket = DataPacket(cid=tuple(raw_data[22:38]), sourceName=bytes(raw_data[44:108]).decode('utf-8').replace('\0', ''),
+        tmpPacket = DataPacket(cid=tuple(raw_data[22:38]),
+                               sourceName=bytes(raw_data[44:108]).decode('utf-8').replace('\0', ''),
                                universe=byte_tuple_to_int(raw_data[113:115]))  # high byte first
         tmpPacket.priority = raw_data[108]
         tmpPacket.syncAddr = byte_tuple_to_int(raw_data[109:111])
         tmpPacket.sequence = raw_data[111]
-        tmpPacket.option_PreviewData = bool(raw_data[112] & 0b10000000)  # use the 7th bit as preview_data
-        tmpPacket.option_StreamTerminated = bool(raw_data[112] & 0b01000000)  # use bit 6 as stream terminated
+        tmpPacket.option_PreviewData = bool(raw_data[112] & 0b10000000)  # use the 7th bit as
+        # preview_data
+        tmpPacket.option_StreamTerminated = bool(raw_data[112] & 0b01000000)  # use bit 6 as
+        # stream terminated
         tmpPacket.option_ForceSync = bool(raw_data[112] & 0b00100000)  # use bit 5 as force sync
         tmpPacket.dmxStartCode = raw_data[125]
         tmpPacket.dmxData = raw_data[126:638]

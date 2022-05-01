@@ -1,5 +1,4 @@
-# This file is under MIT license. The license file can be obtained in the root directory of this
-# module.
+# This file is under MIT license. The license file can be obtained in the root directory of this module.
 
 from typing import Dict
 from sacn.messages.universe_discovery import UniverseDiscoveryPacket
@@ -13,14 +12,12 @@ SEND_OUT_INTERVAL = 1
 E131_E131_UNIVERSE_DISCOVERY_INTERVAL = 10
 
 
-class SenderHandler(SenderSocketListener):
+class SenderHandlerAsync(SenderSocketListener):
     # TODO: start using type CID instead of tuple
-    def __init__(self, cid: tuple, source_name: str, outputs: Dict[int, Output], bind_address: str,
-                 bind_port: int, fps: int, socket: SenderSocketBase = None):
+    def __init__(self, cid: tuple, source_name: str, outputs: Dict[int, Output], bind_address: str, bind_port: int, fps: int, socket: SenderSocketBase = None):
         """
-        This is a private class and should not be used elsewhere. It handles the sender state
-        with sACN specific values. Uses a UDP sender socket with the given bind-address and
-        -port, if the socket was not provided (i.e. None).
+        This is a private class and should not be used elsewhere. It handles the sender state with sACN specific values.
+        Uses a UDP sender socket with the given bind-address and -port, if the socket was not provided (i.e. None).
         """
         if socket is None:
             self.socket: SenderSocketBase = SenderSocketUDP(self, bind_address, bind_port, fps)
@@ -73,9 +70,9 @@ class SenderHandler(SenderSocketListener):
 
     def send_out_all_universes(self, sync_universe: int, universes: dict, current_time: float):
         """
-        Sends out all universes in one go. This is not done by this thread! This is done by the
-        caller's thread. This uses the E1.31 sync mechanism to try to sync all universes. Note
-        that not all receivers support this feature.
+        Sends out all universes in one go. This is not done by this thread! This is done by the caller's thread.
+        This uses the E1.31 sync mechanism to try to sync all universes.
+        Note that not all receivers support this feature.
         """
         # go through the list of outputs and send everything out
         # Note: dict may changes size during iteration (multithreading)
@@ -84,8 +81,7 @@ class SenderHandler(SenderSocketListener):
             self.send_out(output, current_time)
             output._packet.syncAddr = 0
 
-        sync_packet = SyncPacket(cid=self._CID, syncAddr=sync_universe,
-                                 sequence=self._sync_sequence)
+        sync_packet = SyncPacket(cid=self._CID, syncAddr=sync_universe, sequence=self._sync_sequence)
         # Increment sequence number for next time.
         self._sync_sequence += 1
         if self._sync_sequence > 255:

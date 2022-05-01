@@ -1,9 +1,10 @@
-# This file is under MIT license. The license file can be obtained in the root directory of this module.
+# This file is under MIT license. The license file can be obtained
+# in the root directory of this module.
 
 import pytest
 import sacn
 from sacn.messages.data_packet import DataPacket
-from sacn.receiving.receiver_socket_test import ReceiverSocketTest
+from tests.receiving.receiver_socket_test import ReceiverSocketTest
 
 
 def get_receiver():
@@ -82,8 +83,10 @@ def test_remove_listener():
         called += 1
 
     # register listener multiple times
-    receiver.register_listener('universe', callback_packet, universe=packetSend.universe)
-    receiver.register_listener('universe', callback_packet, universe=packetSend.universe)
+    receiver.register_listener('universe', callback_packet,
+                               universe=packetSend.universe)
+    receiver.register_listener('universe', callback_packet,
+                               universe=packetSend.universe)
 
     socket.call_on_data(bytes(packetSend.getBytes()), 0)
     assert called == 2
@@ -122,8 +125,10 @@ def test_remove_listener_from_universe():
         called += 1
 
     # register listener multiple times
-    receiver.register_listener('universe', callback_packet, universe=test_universe_one)
-    receiver.register_listener('universe', callback_packet, universe=test_universe_two)
+    receiver.register_listener('universe', callback_packet,
+                               universe=test_universe_one)
+    receiver.register_listener('universe', callback_packet,
+                               universe=test_universe_two)
 
     packet_send.universe = test_universe_one
     socket.call_on_data(bytes(packet_send.getBytes()), 0)

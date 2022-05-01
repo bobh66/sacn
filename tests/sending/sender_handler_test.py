@@ -6,7 +6,7 @@ from sacn.messages.sync_packet import SyncPacket
 from sacn.messages.universe_discovery import UniverseDiscoveryPacket
 from sacn.sending.output import Output
 from sacn.sending.sender_handler import SenderHandler
-from sacn.sending.sender_socket_test import SenderSocketTest
+from tests.sending.sender_socket_test import SenderSocketTest
 
 
 def get_handler():

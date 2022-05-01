@@ -1,4 +1,5 @@
-# This file is under MIT license. The license file can be obtained in the root directory of this module.
+# This file is under MIT license. The license file can be obtained in the root
+# directory of this module.
 
 import copy
 from sacn.messages.root_layer import RootLayer
@@ -21,10 +22,13 @@ class SenderSocketTest(SenderSocketBase):
         self.stop_called = True
 
     def send_unicast(self, data: RootLayer, destination: str) -> None:
-        self.send_unicast_called = (copy.deepcopy(data), copy.deepcopy(destination))
+        self.send_unicast_called = (copy.deepcopy(data),
+                                    copy.deepcopy(destination))
 
-    def send_multicast(self, data: RootLayer, destination: str, ttl: int) -> None:
-        self.send_multicast_called = (copy.deepcopy(data), copy.deepcopy(destination), ttl)
+    def send_multicast(self, data: RootLayer, destination: str,
+                       ttl: int) -> None:
+        self.send_multicast_called = (copy.deepcopy(data),
+                                      copy.deepcopy(destination), ttl)
 
     def send_broadcast(self, data: RootLayer) -> None:
         self.send_broadcast_called = copy.deepcopy(data)
